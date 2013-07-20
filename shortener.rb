@@ -2,6 +2,7 @@ require 'sinatra'
 require "sinatra/reloader" if development?
 require 'active_record'
 require 'pry'
+require 'zlib'
 
 configure :development, :production do
     ActiveRecord::Base.establish_connection(
@@ -36,12 +37,15 @@ form = <<-eos
     </script>
 eos
 
-# Models to Access the database 
-# through ActiveRecord.  Define 
+# Models to Access the database
+# through ActiveRecord.  Define
 # associations here if need be
 #
 # http://guides.rubyonrails.org/association_basics.html
+
+
 class Link < ActiveRecord::Base
+  self.table_name = "url_table"
 end
 
 get '/' do
@@ -50,6 +54,14 @@ end
 
 post '/new' do
     # PUT CODE HERE TO CREATE NEW SHORTENED LINKS
+    # puts params[:url]
+    # crc32 = Zlib::crc32(params[:url]).to_s
+    # puts crc32
+    # crc32
+    #use url and crc32 in link funciton
+    # @link = Link.create(hashURL: crc32, url: @params['url'])
+    @link = Link.create(hashURL: 'hashURL', normalUrl: 'url')
+    binding.pry
 end
 
 get '/jquery.js' do
@@ -58,4 +70,4 @@ end
 
 ####################################################
 ####  Implement Routes to make the specs pass ######
-####################################################
+####################################################``
