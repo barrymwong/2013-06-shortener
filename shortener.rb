@@ -58,8 +58,8 @@ post '/new' do
     # puts crc32
     # crc32
     #use url and crc32 in link funciton
-    @link = Link.create(hashUrl: "http://localhost:4567/r/#{crc32}", normalUrl: params[:url])
-     '<a href="' << @link.hashUrl << '" target="_blank">' << @link.hashUrl << '</a>'
+    @link = Link.create(hashUrl: "#{crc32}", normalUrl: params[:url])
+     '<a href="http://localhost:4567/r/' << @link.hashUrl << '" target="_blank">' << @link.hashUrl << '</a>'
 end
 
 get '/jquery.js' do
@@ -70,9 +70,12 @@ end
 ####  Implement Routes to make the specs pass ######
 ####################################################
 
-get '/r' do
-    redirect 'http://google.com'
-    puts params[:url]
+get '/r/:url' do
+    @lookup = Link.find_by_hashUrl(params[:url])
+    puts @lookup
+    puts 'hi'
+    redirect @lookup.normalUrl
+    # puts params[:url]
 end
 
 
