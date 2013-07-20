@@ -52,13 +52,15 @@ get '/' do
 end
 
 post '/new' do
-    # PUT CODE HERE TO CREATE NEW SHORTENED LINKS
-    # puts params[:url]
     crc32 = Zlib::crc32(params[:url]).to_s
-    # puts crc32
-    # crc32
-    #use url and crc32 in link funciton
-    @link = Link.create(hashUrl: "#{crc32}", normalUrl: params[:url])
+
+    @lookup = Link.find_by_hashUrl(crc32)
+    if @lookup == nil
+        @link = Link.create(hashUrl: "#{crc32}", normalUrl: params[:url])
+    else
+        @link = @lookup
+    end
+
      '<a href="http://localhost:4567/r/' << @link.hashUrl << '" target="_blank">' << @link.hashUrl << '</a>'
 end
 
@@ -66,16 +68,9 @@ get '/jquery.js' do
     send_file 'jquery.js'
 end
 
-####################################################
-####  Implement Routes to make the specs pass ######
-####################################################
-
 get '/r/:url' do
     @lookup = Link.find_by_hashUrl(params[:url])
-    puts @lookup
-    puts 'hi'
     redirect @lookup.normalUrl
-    # puts params[:url]
 end
 
 
