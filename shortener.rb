@@ -14,12 +14,12 @@ end
 # Quick and dirty form for testing application
 #
 # If building a real application you should probably
-# use views: 
+# use views:
 # http://www.sinatrarb.com/intro#Views%20/%20Templates
 form = <<-eos
     <form id='myForm'>
         <input type='text' name="url">
-        <input type="submit" value="Shorten"> 
+        <input type="submit" value="Shorten">
     </form>
     <h2>Results:</h2>
     <h3 id="display"></h3>
@@ -45,7 +45,6 @@ eos
 
 
 class Link < ActiveRecord::Base
-  self.table_name = "url_table"
 end
 
 get '/' do
@@ -55,13 +54,12 @@ end
 post '/new' do
     # PUT CODE HERE TO CREATE NEW SHORTENED LINKS
     # puts params[:url]
-    # crc32 = Zlib::crc32(params[:url]).to_s
+    crc32 = Zlib::crc32(params[:url]).to_s
     # puts crc32
     # crc32
     #use url and crc32 in link funciton
-    # @link = Link.create(hashURL: crc32, url: @params['url'])
-    @link = Link.create(hashURL: 'hashURL', normalUrl: 'url')
-    binding.pry
+    @link = Link.create(hashUrl: "http://localhost:4567/r/#{crc32}", normalUrl: params[:url])
+     '<a href="' << @link.hashUrl << '" target="_blank">' << @link.hashUrl << '</a>'
 end
 
 get '/jquery.js' do
@@ -70,4 +68,13 @@ end
 
 ####################################################
 ####  Implement Routes to make the specs pass ######
-####################################################``
+####################################################
+
+get '/r' do
+    redirect 'http://google.com'
+    puts params[:url]
+end
+
+
+
+

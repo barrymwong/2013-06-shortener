@@ -6,11 +6,9 @@
 # and once a migration is run, a new one must
 # be created with a later timestamp.
 
-# sqlite3 command
-
 class CreateLinks < ActiveRecord::Migration
     # PUT MIGRATION CODE HERE TO SETUP DATABASE
-  create_table :url_table do |url|
+  create_table :links do |url|
     url.string :hashUrl
     url.string :normalUrl
   end
